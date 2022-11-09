@@ -14,7 +14,7 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Learn React legal
+          Learn React legal muito
         </a>
       </header>
     </div>
