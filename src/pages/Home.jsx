@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { getCategories } from '../services/api';
+import { getCategories, getProductsFromCategoryAndQuery } from '../services/api';
 import SearchProduct from './SearchProduct';
+import Categories from '../components/Categories';
 
 class Home extends Component {
   state = {
     categories: [],
+    productList: [],
   };
 
   async componentDidMount() {
@@ -18,8 +20,14 @@ class Home extends Component {
     this.setState({ categories: api });
   };
 
+  handleCategories = async ({ target }) => {
+    const { value } = target;
+    const response = await getProductsFromCategoryAndQuery(value, '');
+    this.setState({ productList: response.results });
+  };
+
   render() {
-    const { categories } = this.state;
+    const { categories, productList } = this.state;
     return (
       <div className="container">
         <div className="container-categories">
@@ -30,6 +38,7 @@ class Home extends Component {
                 type="radio"
                 name="categories"
                 value={ categorie.id }
+                onChange={ this.handleCategories }
               />
               { categorie.name }
             </label>
@@ -40,6 +49,14 @@ class Home extends Component {
         </p>
         <Link to="/shopping" data-testid="shopping-cart-button">Shopping Cart</Link>
         <SearchProduct />
+        { productList.length > 0 && (
+          <div>
+            { productList.map((product) => (
+              <Categories
+                key={ product.id }
+                list={ product }
+              />))}
+          </div>) }
       </div>
     );
   }
