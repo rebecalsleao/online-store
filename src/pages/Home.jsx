@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { getCategories, getProductsFromCategoryAndQuery } from '../services/api';
-import SearchProduct from './SearchProduct';
 import Categories from '../components/Categories';
 
 class Home extends Component {
   state = {
     categories: [],
     productList: [],
+    search: '',
   };
 
   async componentDidMount() {
@@ -20,14 +20,26 @@ class Home extends Component {
     this.setState({ categories: api });
   };
 
+  handleChange = ({ target }) => {
+    const { name, value } = target;
+    this.setState({ [name]: value });
+  };
+
   handleCategories = async ({ target }) => {
-    const { value } = target;
-    const response = await getProductsFromCategoryAndQuery(value, '');
-    this.setState({ productList: response.results });
+    const { checked, value } = target;
+    const { search } = this.state;
+    if (checked) {
+      const response = await getProductsFromCategoryAndQuery(value, '');
+      this.setState({ productList: response.results });
+    } else {
+      const response = await getProductsFromCategoryAndQuery('', search);
+      this.setState({ productList: response.results });
+    }
   };
 
   render() {
-    const { categories, productList } = this.state;
+    const { categories, productList, search } = this.state;
+    console.log(productList);
     return (
       <div className="container">
         <div className="container-categories">
@@ -44,19 +56,37 @@ class Home extends Component {
             </label>
           ))}
         </div>
-        <p data-testid="home-initial-message">
-          Digite algum termo de pesquisa ou escolha uma categoria.
-        </p>
-        <Link to="/shopping" data-testid="shopping-cart-button">Shopping Cart</Link>
-        <SearchProduct />
-        { productList.length > 0 && (
+        <div className="container-search">
+          <p data-testid="home-initial-message">
+            Digite algum termo de pesquisa ou escolha uma categoria.
+          </p>
+          <input
+            data-testid="query-input"
+            type="text"
+            name="search"
+            value={ search }
+            onChange={ this.handleChange }
+
+          />
+          <button
+            data-testid="query-button"
+            type="button"
+            onClick={ this.handleCategories }
+
+          >
+            Buscar
+          </button>
+          <br />
+          <Link to="/shopping" data-testid="shopping-cart-button">Shopping Cart</Link>
+        </div>
+        { productList.length > 0 ? (
           <div>
             { productList.map((product) => (
               <Categories
                 key={ product.id }
                 list={ product }
               />))}
-          </div>) }
+          </div>) : (<p>Nenhum produto foi encontrado</p>) }
       </div>
     );
   }
