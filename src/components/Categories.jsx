@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 class Categories extends React.Component {
   state = {
-    productItems: {},
+    productItems: { },
   };
 
   componentDidMount() {
