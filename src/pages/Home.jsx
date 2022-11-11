@@ -46,7 +46,6 @@ class Home extends Component {
 
   render() {
     const { categories, productList, search, storage } = this.state;
-    console.log(productList);
     return (
       <div className="container">
         <div className="container-categories">

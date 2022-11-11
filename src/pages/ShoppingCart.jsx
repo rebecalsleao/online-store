@@ -26,7 +26,7 @@ class ShoppingCart extends Component {
                 <p>{item.price}</p>
                 <p data-testid="shopping-cart-product-quantity">
                   Quantidade:
-                  {myCart.length}
+                  {item.quantidade}
                 </p>
               </div>
             ))}
