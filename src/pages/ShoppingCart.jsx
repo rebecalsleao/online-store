@@ -23,7 +23,7 @@ class ShoppingCart extends Component {
                 <h1 data-testid="shopping-cart-product-name">
                   {item.title}
                 </h1>
-                <p>{item.price}</p>
+                <p>{ item.quantidade * item.price}</p>
                 <p data-testid="shopping-cart-product-quantity">
                   Quantidade:
                   {item.quantidade}
