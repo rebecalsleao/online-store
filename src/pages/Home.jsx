@@ -8,12 +8,19 @@ class Home extends Component {
     categories: [],
     productList: [],
     search: '',
+    storage: [],
   };
 
   async componentDidMount() {
-    const api = await this.listCategories();
-    console.log(api);
+    await this.listCategories();
   }
+
+  addLocalStorage = (newArray) => {
+    this.setState({ storage: newArray }, () => {
+      const { storage } = this.state;
+      localStorage.setItem('cart', JSON.stringify(storage));
+    });
+  };
 
   listCategories = async () => {
     const api = await getCategories();
@@ -38,7 +45,7 @@ class Home extends Component {
   };
 
   render() {
-    const { categories, productList, search } = this.state;
+    const { categories, productList, search, storage } = this.state;
     console.log(productList);
     return (
       <div className="container">
@@ -83,6 +90,8 @@ class Home extends Component {
           <div>
             { productList.map((product) => (
               <Categories
+                addLocalStorage={ this.addLocalStorage }
+                storage={ storage }
                 key={ product.id }
                 list={ product }
               />))}
