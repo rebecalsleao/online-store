@@ -16,6 +16,7 @@ class Home extends Component {
   }
 
   addLocalStorage = (newArray) => {
+    console.log(newArray);
     this.setState({ storage: newArray }, () => {
       const { storage } = this.state;
       localStorage.setItem('cart', JSON.stringify(storage));
@@ -46,7 +47,6 @@ class Home extends Component {
 
   render() {
     const { categories, productList, search, storage } = this.state;
-    console.log(productList);
     return (
       <div className="container">
         <div className="container-categories">

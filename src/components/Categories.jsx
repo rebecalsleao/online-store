@@ -9,14 +9,23 @@ class Categories extends React.Component {
 
   componentDidMount() {
     const { list } = this.props;
+    list.quantidade = 1;
     this.setState({ productItems: list });
   }
 
   setProductCart = () => {
     const { storage, addLocalStorage } = this.props;
     const { productItems } = this.state;
-    storage.push(productItems);
-    addLocalStorage(storage);
+    const validation = storage.some((e) => e.id === productItems.id);
+    if (validation) {
+      const newStorage = storage.indexOf(productItems);
+      const newObject = storage;
+      newObject[newStorage].quantidade += 1;
+      addLocalStorage(newObject);
+    } else {
+      storage.push(productItems);
+      addLocalStorage(storage);
+    }
   };
 
   render() {
@@ -47,6 +56,7 @@ Categories.propTypes = {
     thumbnail: PropTypes.string.isRequired,
     price: PropTypes.number.isRequired,
     id: PropTypes.string,
+    quantidade: PropTypes.number,
   }).isRequired,
 
   storage: PropTypes.arrayOf.isRequired,
