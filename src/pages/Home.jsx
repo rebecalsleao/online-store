@@ -16,7 +16,6 @@ class Home extends Component {
   }
 
   addLocalStorage = (newArray) => {
-    console.log(newArray);
     this.setState({ storage: newArray }, () => {
       const { storage } = this.state;
       localStorage.setItem('cart', JSON.stringify(storage));
