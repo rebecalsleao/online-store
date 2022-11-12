@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import CardShoppingCart from '../components/CardShoppingCart';
 
 class ShoppingCart extends Component {
   state = {
@@ -9,8 +10,17 @@ class ShoppingCart extends Component {
     if (localStorage.cart) {
       const getStorage = JSON.parse(localStorage.getItem('cart'));
       this.setState({ myCart: getStorage });
+    } else {
+      localStorage.setItem('cart', JSON.stringify([]));
     }
   }
+
+  addLocalStorage = (newArray) => {
+    this.setState({ myCart: newArray }, () => {
+      const { myCart } = this.state;
+      localStorage.setItem('cart', JSON.stringify(myCart));
+    });
+  };
 
   render() {
     const { myCart } = this.state;
@@ -19,16 +29,12 @@ class ShoppingCart extends Component {
         { myCart.length > 0 ? (
           <div>
             { myCart.map((item) => (
-              <div key={ item.id }>
-                <h1 data-testid="shopping-cart-product-name">
-                  {item.title}
-                </h1>
-                <p>{item.price}</p>
-                <p data-testid="shopping-cart-product-quantity">
-                  Quantidade:
-                  {item.quantidade}
-                </p>
-              </div>
+              <CardShoppingCart
+                product={ item }
+                key={ item.id }
+                arraProduct={ myCart }
+                funcLocalStorage={ this.addLocalStorage }
+              />
             ))}
           </div>
         ) : <p data-testid="shopping-cart-empty-message">Seu carrinho está vazio</p> }
