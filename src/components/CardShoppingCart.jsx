@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 class CardShoppingCart extends Component {
   state = {
@@ -39,8 +40,8 @@ class CardShoppingCart extends Component {
     const { productItem, arrayProduct } = this.state;
     const { funcLocalStorage } = this.props;
     const removeItem = arrayProduct.filter((item) => item !== productItem);
+    console.log(removeItem);
     funcLocalStorage(removeItem);
-    this.componentDidUpdate();
   };
 
   render() {
@@ -81,5 +82,15 @@ class CardShoppingCart extends Component {
     );
   }
 }
+
+CardShoppingCart.propTypes = {
+  arraProduct: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  product: PropTypes.shape({
+    title: PropTypes.string,
+    price: PropTypes.number,
+    quantidade: PropTypes.number,
+  }).isRequired,
+  funcLocalStorage: PropTypes.func.isRequired,
+};
 
 export default CardShoppingCart;
