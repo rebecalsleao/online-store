@@ -31,11 +31,13 @@ class Categories extends React.Component {
   render() {
     const { list } = this.props;
     return (
-      <div data-testid="product">
+      <div data-testid="product" className="card">
         <Link to={ `/product/${list.id}` } data-testid="product-detail-link">
           <p>{list.title}</p>
           <img src={ list.thumbnail } alt={ list.title } />
-          <p>{`R$ ${list.price}`}</p>
+          <p>
+            {(list.price).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+          </p>
         </Link>
         <button
           type="button"
@@ -59,7 +61,7 @@ Categories.propTypes = {
     quantidade: PropTypes.number,
   }).isRequired,
 
-  storage: PropTypes.arrayOf.isRequired,
+  storage: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   addLocalStorage: PropTypes.func.isRequired,
 };
 

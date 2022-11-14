@@ -47,12 +47,15 @@ class CardShoppingCart extends Component {
   render() {
     const { product } = this.props;
     const { title, price, quantidade } = product;
+    const valorAll = quantidade * price;
     return (
       <div>
         <h1 data-testid="shopping-cart-product-name">
           {title}
         </h1>
-        <p>{ quantidade * price}</p>
+        <p>
+          { valorAll.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) }
+        </p>
         <button
           type="button"
           onClick={ this.setQuatiProductMore }

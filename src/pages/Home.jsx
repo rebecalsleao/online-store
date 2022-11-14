@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import { getCategories, getProductsFromCategoryAndQuery } from '../services/api';
 import Categories from '../components/Categories';
+import Header from './Header';
 
 class Home extends Component {
   state = {
@@ -47,54 +47,43 @@ class Home extends Component {
   render() {
     const { categories, productList, search, storage } = this.state;
     return (
-      <div className="container">
-        <div className="container-categories">
-          { categories.map((categorie) => (
-            <label htmlFor={ categorie.id } data-testid="category" key={ categorie.id }>
-              <input
-                id={ categorie.id }
-                type="radio"
-                name="categories"
-                value={ categorie.id }
-                onChange={ this.handleCategories }
-              />
-              { categorie.name }
-            </label>
-          ))}
+      <div className="primary-container">
+        <Header
+          buttonSeach={ this.handleCategories }
+          valueSearch={ search }
+          changeInput={ this.handleChange }
+        />
+        <div className="container-main">
+          <div className="container-categories">
+            { categories.map((categorie) => (
+              <label htmlFor={ categorie.id } data-testid="category" key={ categorie.id }>
+                <input
+                  id={ categorie.id }
+                  type="radio"
+                  name="categories"
+                  value={ categorie.id }
+                  onChange={ this.handleCategories }
+                />
+                { categorie.name }
+              </label>
+            ))}
+          </div>
+          <div className="main">
+            <p data-testid="home-initial-message">
+              Digite algum termo de pesquisa ou escolha uma categoria.
+            </p>
+            { productList.length > 0 ? (
+              <div className="container-products">
+                { productList.map((product) => (
+                  <Categories
+                    addLocalStorage={ this.addLocalStorage }
+                    storage={ storage }
+                    key={ product.id }
+                    list={ product }
+                  />))}
+              </div>) : (<p>Nenhum produto foi encontrado</p>) }
+          </div>
         </div>
-        <div className="container-search">
-          <p data-testid="home-initial-message">
-            Digite algum termo de pesquisa ou escolha uma categoria.
-          </p>
-          <input
-            data-testid="query-input"
-            type="text"
-            name="search"
-            value={ search }
-            onChange={ this.handleChange }
-
-          />
-          <button
-            data-testid="query-button"
-            type="button"
-            onClick={ this.handleCategories }
-
-          >
-            Buscar
-          </button>
-          <br />
-          <Link to="/shopping" data-testid="shopping-cart-button">Shopping Cart</Link>
-        </div>
-        { productList.length > 0 ? (
-          <div>
-            { productList.map((product) => (
-              <Categories
-                addLocalStorage={ this.addLocalStorage }
-                storage={ storage }
-                key={ product.id }
-                list={ product }
-              />))}
-          </div>) : (<p>Nenhum produto foi encontrado</p>) }
       </div>
     );
   }

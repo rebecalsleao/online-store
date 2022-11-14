@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import CardShoppingCart from '../components/CardShoppingCart';
+import Header from './Header';
 
 class ShoppingCart extends Component {
   state = {
@@ -26,6 +27,7 @@ class ShoppingCart extends Component {
     const { myCart } = this.state;
     return (
       <div>
+        <Header />
         { myCart.length > 0 ? (
           <div>
             { myCart.map((item) => (
