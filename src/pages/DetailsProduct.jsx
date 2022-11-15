@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { getProductById } from '../services/api';
 import Header from './Header';
+import FormAvaliation from '../components/FormAvaliation';
 
 class DetailsProduct extends Component {
   state = {
@@ -69,8 +70,8 @@ class DetailsProduct extends Component {
           onClick={ this.setProductCart }
         >
           Adicionar ao carrinho
-
         </button>
+        <FormAvaliation />
       </div>
     );
   }
