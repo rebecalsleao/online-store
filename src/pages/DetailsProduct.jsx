@@ -4,18 +4,54 @@ import PropTypes from 'prop-types';
 import { getProductById } from '../services/api';
 import Header from './Header';
 import FormAvaliation from '../components/FormAvaliation';
+import ViewComments from '../components/ViewComments';
 
 class DetailsProduct extends Component {
   state = {
     detailsProduct: {},
     storage: [],
-
+    email: '',
+    avaliation: null,
+    message: '',
+    formValidate: false,
+    comments: [],
   };
 
   async componentDidMount() {
-    this.requireApiProduct();
+    await this.requireApiProduct();
     localStorage.setItem('cart', JSON.stringify([]));
+    const { match: { params: { id } } } = this.props;
+    if (localStorage[id]) {
+      this.setState({
+        comments: JSON.parse(localStorage.getItem(id)),
+      });
+    }
   }
+
+  handleClick = (e) => {
+    e.preventDefault();
+    const { email, avaliation, message } = this.state;
+    const validation = [
+      email.length > 0, avaliation !== null,
+    ];
+    console.log(validation);
+    const verification = validation.some((el) => el === false);
+    if (verification) {
+      this.setState({ formValidate: true });
+    } else {
+      const { comments } = this.state;
+      const { match: { params: { id } } } = this.props;
+      const objectAvaliation = { email, avaliation, message };
+      comments.push(objectAvaliation);
+      localStorage.setItem(`${id}`, JSON.stringify(comments));
+      this.setState({ formValidate: false, email: '', message: '', avaliation: '0' });
+    }
+  };
+
+  handleChange = ({ target }) => {
+    const { name, value } = target;
+    this.setState({ [name]: value });
+  };
 
   requireApiProduct = async () => {
     const { match: { params: { id } } } = this.props;
@@ -23,6 +59,11 @@ class DetailsProduct extends Component {
     objProduct.quantidade = 1;
     this.setState({
       detailsProduct: objProduct,
+    }, () => {
+      const { detailsProduct } = this.state;
+      if (!localStorage[id]) {
+        localStorage.setItem(`${detailsProduct.id}`, JSON.stringify([]));
+      }
     });
   };
 
@@ -48,7 +89,8 @@ class DetailsProduct extends Component {
   };
 
   render() {
-    const { detailsProduct } = this.state;
+    const { detailsProduct, email, avaliation, message, formValidate,
+      comments } = this.state;
     const { price } = detailsProduct;
     return (
       <div>
@@ -71,7 +113,22 @@ class DetailsProduct extends Component {
         >
           Adicionar ao carrinho
         </button>
-        <FormAvaliation />
+        <FormAvaliation
+          email={ email }
+          avaliation={ avaliation }
+          message={ message }
+          handleChange={ this.handleChange }
+          handleClick={ this.handleClick }
+          formValidate={ formValidate }
+        />
+        { comments.length && (
+          <div>
+            {comments.map((comment) => (
+              <ViewComments
+                comment={ comment }
+                key={ comment.email }
+              />)) }
+          </div>)}
       </div>
     );
   }
