@@ -4,7 +4,7 @@ import Header from './Header';
 
 class ShoppingCart extends Component {
   state = {
-    myCart: [],
+    myCart: []
   };
 
   componentDidMount() {
