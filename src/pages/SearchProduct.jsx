@@ -4,7 +4,7 @@ import { getProductsFromCategoryAndQuery } from '../services/api';
 class SearchProduct extends Component {
   state = {
     search: '',
-    searchList: []
+    searchList: [],
   };
 
   handleChange = ({ target }) => {
