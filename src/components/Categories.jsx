@@ -30,8 +30,7 @@ class Categories extends React.Component {
 
   render() {
     const { list } = this.props;
-    const { productItems } = this.state;
-    // const { shipping } = productItems;
+    const { shipping } = list;
     return (
       <div data-testid="product" className="card">
         <Link to={ `/product/${list.id}` } data-testid="product-detail-link">
@@ -41,7 +40,7 @@ class Categories extends React.Component {
             {(list.price).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
           </p>
         </Link>
-        {/* { shipping.free_shipping && <p data-testid="free-shipping">FRETE GRÁTIS</p> } */}
+        { shipping.free_shipping && <p data-testid="free-shipping">FRETE GRÁTIS</p> }
         <button
           type="button"
           data-testid="product-add-to-cart"
@@ -62,6 +61,7 @@ Categories.propTypes = {
     price: PropTypes.number.isRequired,
     id: PropTypes.string,
     quantidade: PropTypes.number,
+    shipping: PropTypes.shape({ free_shipping: PropTypes.bool }),
   }).isRequired,
 
   storage: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
